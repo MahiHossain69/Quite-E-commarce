@@ -69,39 +69,25 @@ export function MobileMenu({ isOpen, onClose, onOpenSearch }) {
           </SheetHeader>
 
           <nav className="mt-10 flex flex-col divide-y divide-white/[0.07]">
-            {siteConfig.navLinks.map((link, idx) => {
-              const isLoginLink = link.label === "LOGIN";
-              const targetLabel = isLoginLink
-                ? isAuthenticated
-                  ? "ACCOUNT"
-                  : "LOGIN"
-                : link.label;
-              const targetHref = isLoginLink
-                ? isAuthenticated
-                  ? "/account"
-                  : "/login"
-                : link.href;
-
-              return (
-                <Link
-                  key={link.label}
-                  href={targetHref}
-                  onClick={handleNavClick}
-                  className="group flex items-center justify-between
-                             font-mono text-[1.6rem] sm:text-[1.8rem]
-                             tracking-[0.1em] font-light
-                             text-white/90 hover:text-white
-                             transition-colors
-                             py-5 sm:py-6"
-                >
-                  <span className="uppercase">{targetLabel}</span>
-                  <span className="flex items-center gap-2.5 font-mono text-[11px] text-neutral-400 group-hover:text-white group-hover:translate-x-1 transition-all duration-200">
-                    0{idx + 1}
-                    <span className="text-base leading-none">→</span>
-                  </span>
-                </Link>
-              );
-            })}
+            {siteConfig.navLinks.map((link, idx) => (
+              <Link
+                key={link.label}
+                href={link.href}
+                onClick={handleNavClick}
+                className="group flex items-center justify-between
+                           font-mono text-[1.6rem] sm:text-[1.8rem]
+                           tracking-[0.1em] font-light
+                           text-white/90 hover:text-white
+                           transition-colors
+                           py-5 sm:py-6"
+              >
+                <span className="uppercase">{link.label}</span>
+                <span className="flex items-center gap-2.5 font-mono text-[11px] text-neutral-400 group-hover:text-white group-hover:translate-x-1 transition-all duration-200">
+                  0{idx + 1}
+                  <span className="text-base leading-none">→</span>
+                </span>
+              </Link>
+            ))}
             {(user?.role === "admin" || user?.role === "superuser") && (
               <Link
                 href="/QuiteadminPan"

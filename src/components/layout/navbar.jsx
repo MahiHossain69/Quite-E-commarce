@@ -69,23 +69,17 @@ export function Navbar() {
             </Link>
           </div>
 
-          <nav className="hidden lg:flex items-center justify-center gap-7 xl:gap-12">
-            {siteConfig.navLinks
-              .filter((link) => {
-                // Hide LOGIN link entirely from main nav when authenticated
-                if (link.label === "LOGIN" && isAuthenticated) return false;
-                return true;
-              })
-              .map((link) => (
-                <Link
-                  key={link.label}
-                  href={link.href}
-                  className="relative font-mono text-[11px] xl:text-xs font-normal tracking-[0.2em] text-[#111111] hover:text-black transition-colors group py-1"
-                >
-                  <span>{link.label}</span>
-                  <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-black transition-all duration-300 group-hover:w-full" />
-                </Link>
-              ))}
+          <nav className="hidden lg:flex items-center justify-center gap-8 xl:gap-14">
+            {siteConfig.navLinks.map((link) => (
+              <Link
+                key={link.label}
+                href={link.href}
+                className="relative font-mono text-[11px] xl:text-xs font-normal tracking-[0.2em] text-[#111111] hover:text-black transition-colors group py-1"
+              >
+                <span>{link.label}</span>
+                <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-black transition-all duration-300 group-hover:w-full" />
+              </Link>
+            ))}
           </nav>
 
           <div className="flex-1 flex items-center justify-end gap-4 sm:gap-6 md:gap-7">

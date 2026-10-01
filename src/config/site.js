@@ -10,15 +10,12 @@ export const siteConfig = {
   description:
     "Built for those who choose form over noise. High-end minimal luxury fashion campaign and lookbook.",
 
-  // Navigation Links
+  // Navigation Links - 4 core links
   navLinks: [
     { label: "SHOP", href: "/shop" },
     { label: "CATEGORIES", href: "/#categories" },
     { label: "NEW ARRIVALS", href: "/#new-arrivals" },
-    { label: "COMMUNITY", href: "/#community" },
-    { label: "PHILOSOPHY", href: "/#philosophy" },
     { label: "CONTACT", href: "/contact" },
-    { label: "LOGIN", href: "/login" },
   ],
 
   // Community Section Configuration
