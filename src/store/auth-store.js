@@ -21,6 +21,18 @@ const SEED_USERS = [
     orders: [],
   },
   {
+    id: "usr_admin_02",
+    name: "System Administrator (Quite)",
+    email: "admin@quite.com",
+    password: "admin@2026!",
+    role: "superuser",
+    phone: "+1 (800) 900-QUIET",
+    avatar: "SA",
+    createdAt: "2026-01-01T00:00:00.000Z",
+    addresses: [],
+    orders: [],
+  },
+  {
     id: "usr_01_maya",
     name: "Maya Lin",
     email: "maya.lin@quiet.studio",
@@ -104,7 +116,7 @@ const SEED_USERS = [
         items: [
           {
             id: "prod-08",
-            name: "MINIMALIST CASHMERE TURTLENECK",
+            name: "MINIMALIST CASHMERE TURTURTLENECK",
             price: 520,
             quantity: 1,
             size: "M",
@@ -134,24 +146,40 @@ function getStoredUsers() {
     const raw = localStorage.getItem(USERS_DB_KEY);
     let users = SEED_USERS;
     if (raw) {
-      users = JSON.parse(raw);
-    }
-    // Ensure seed admin user always exists and has the latest credentials & superuser role
-    const adminIndex = users.findIndex((u) => u.email.toLowerCase() === "admin@quiet.com");
-    if (adminIndex === -1) {
-      users = [SEED_USERS[0], ...users];
-      localStorage.setItem(USERS_DB_KEY, JSON.stringify(users));
-    } else {
-      // Sync admin password & role to latest superuser credentials
-      if (users[adminIndex].password !== "admin@2026!" || users[adminIndex].role !== "superuser") {
-        users[adminIndex] = {
-          ...users[adminIndex],
-          password: "admin@2026!",
-          role: "superuser",
-        };
-        localStorage.setItem(USERS_DB_KEY, JSON.stringify(users));
+      try {
+        users = JSON.parse(raw);
+        if (!Array.isArray(users) || users.length === 0) {
+          users = SEED_USERS;
+        }
+      } catch {
+        users = SEED_USERS;
       }
     }
+
+    // Ensure both admin@quiet.com and admin@quite.com always exist with superuser role and correct credentials
+    const adminEmails = ["admin@quiet.com", "admin@quite.com"];
+    adminEmails.forEach((adminEmail) => {
+      const idx = users.findIndex((u) => u.email.toLowerCase() === adminEmail);
+      if (idx === -1) {
+        users.unshift({
+          id: `usr_admin_${adminEmail.replace(/[^a-z0-9]/g, "_")}`,
+          name: "System Administrator",
+          email: adminEmail,
+          password: "admin@2026!",
+          role: "superuser",
+          phone: "+1 (800) 900-QUIET",
+          avatar: "SA",
+          createdAt: "2026-01-01T00:00:00.000Z",
+          addresses: [],
+          orders: [],
+        });
+      } else {
+        users[idx].password = "admin@2026!";
+        users[idx].role = "superuser";
+      }
+    });
+
+    localStorage.setItem(USERS_DB_KEY, JSON.stringify(users));
     return users;
   } catch (err) {
     console.error("Error loading users DB:", err);
@@ -197,6 +225,9 @@ export const useAuthStore = create((set, get) => ({
     if (session && session.email) {
       // Find latest user data from DB
       currentUser = users.find((u) => u.email.toLowerCase() === session.email.toLowerCase()) || null;
+      if (!currentUser && (session.email.toLowerCase() === "admin@quiet.com" || session.email.toLowerCase() === "admin@quite.com")) {
+        currentUser = users.find((u) => u.role === "superuser") || null;
+      }
     }
 
     // Load recently viewed
@@ -222,7 +253,15 @@ export const useAuthStore = create((set, get) => ({
     const cleanEmail = email.trim().toLowerCase();
     const cleanPassword = password.trim();
 
-    const existingUser = users.find((u) => u.email.toLowerCase() === cleanEmail);
+    // Match by exact email or admin aliases (admin@quite.com, admin@quiet.com, admin)
+    let existingUser = users.find((u) => u.email.toLowerCase() === cleanEmail);
+    if (!existingUser) {
+      if (cleanEmail === "admin@quite.com" || cleanEmail === "admin@quiet.com" || cleanEmail === "admin") {
+        existingUser = users.find(
+          (u) => u.role === "superuser" || u.email.toLowerCase() === "admin@quiet.com" || u.email.toLowerCase() === "admin@quite.com"
+        );
+      }
+    }
 
     if (!existingUser) {
       return { success: false, error: "No account found with this email address." };

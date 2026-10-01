@@ -590,6 +590,41 @@ export function NeuralAccessLogin({
               </div>
             )}
 
+            {/* Quick Demo Access Pills */}
+            {mode === "login" && (
+              <div className="mb-5 pt-3 border-t border-white/10">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-white/40">
+                    QUICK DEMO ACCESS
+                  </span>
+                </div>
+                <div className="grid grid-cols-2 gap-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setEmail("admin@quiet.com");
+                      setPassword("admin@2026!");
+                      setError("");
+                    }}
+                    className="px-2.5 py-1.5 rounded-lg border border-emerald-500/30 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-300 font-mono text-[10px] tracking-wider uppercase flex items-center justify-center gap-1 transition-all cursor-pointer"
+                  >
+                    <span>⚡ SUPERUSER</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setEmail("maya.lin@quiet.studio");
+                      setPassword("password123");
+                      setError("");
+                    }}
+                    className="px-2.5 py-1.5 rounded-lg border border-white/20 bg-white/5 hover:bg-white/10 text-white/80 font-mono text-[10px] tracking-wider uppercase flex items-center justify-center gap-1 transition-all cursor-pointer"
+                  >
+                    <span>👤 CLIENT DEMO</span>
+                  </button>
+                </div>
+              </div>
+            )}
+
             {/* Error Message */}
             {error && (
               <p
